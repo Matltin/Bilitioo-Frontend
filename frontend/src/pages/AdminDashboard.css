@@ -1,116 +1,37 @@
-package main
-
-import (
-	"context"
-	"database/sql"
-	"fmt"
-	"log"
-	"time"
-
-	"github.com/Matltin/Bilitioo-Backend/api"
-	db "github.com/Matltin/Bilitioo-Backend/db/sqlc"
-	elasticsearch "github.com/Matltin/Bilitioo-Backend/elastic_search"
-	"github.com/Matltin/Bilitioo-Backend/mail"
-	db_redis "github.com/Matltin/Bilitioo-Backend/redis"
-	"github.com/Matltin/Bilitioo-Backend/util"
-	"github.com/Matltin/Bilitioo-Backend/worker"
-	"github.com/hibiken/asynq"
-	_ "github.com/lib/pq"
-
-	_ "github.com/Matltin/Bilitioo-Backend/docs"
-	_ "github.com/swaggo/files"       // swagger embed files
-	_ "github.com/swaggo/gin-swagger" // gin-swagger middleware
-)
-
-//	@title			Bilitio API
-//	@version		1.0
-//	@description	API for Bilitio ticket booking system.
-//	@termsOfService	http://localhost:3000/swagger/index.html
-
-//	@contact.name	API Support
-//	@contact.url	http://www.example.com/support
-//	@contact.email	support@example.com
-
-//	@license.name	MIT
-//	@license.url	https://opensource.org/licenses/MIT
-
-//	@host		localhost:3000
-//	@BasePath	/
-//	@schemes	http
-
-// @securityDefinitions.apikey	BearerAuth
-// @in							header
-// @name						Authorization
-func main() {
-	// 1. config
-	config, err := util.LoadConfig(".")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// 2. intialaize db
-	DB, err := sql.Open(config.DBDriver, config.DBSource)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	Queries := db.New(DB)
-
-	// 3. intialaize redis
-	redisOpt := asynq.RedisClientOpt{
-		Addr: config.RedisAddress,
-	}
-	taskDistributor := worker.NewRedisTaskDistributor(redisOpt)
-
-	// 4. set worker
-	go runTaskProcessor(config, redisOpt, Queries)
-	go runScheduler(redisOpt, taskDistributor)
-
-	esClient := elasticsearch.NewElasticsearchClient(config)
-	go runElasticsearchIndexer(taskDistributor)
-
-	redis := db_redis.NewRedisClient(config.RedisAddress)
-
-	// 5. setup server
-	server := api.NewServer(config, taskDistributor, Queries, redis, esClient)
-
-	server.Start(":3000")
+.admin-dashboard {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
 }
 
-// send email task processor
-func runTaskProcessor(config util.Config, redisOpt asynq.RedisClientOpt, store *db.Queries) {
-	mail := mail.NewGmailSender(config.EmailSenderName, config.EmailSenderAdderss, config.EmailSenderPassword)
-	esClient := elasticsearch.NewElasticsearchClient(config)
-	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store, mail, esClient)
-	err := taskProcessor.Start()
-	if err != nil {
-		fmt.Println("failed to start task processor")
-	}
+.admin-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
 }
 
-// check expired reservation processor
-func runScheduler(redisOpt asynq.RedisClientOpt, distributor worker.TaskDistributor) {
-	scheduler := asynq.NewScheduler(redisOpt, nil)
-
-	_, err := scheduler.Register("* * * * *", worker.NewCleanExpiredReservationsTask())
-	if err != nil {
-		log.Fatalf("failed to register cron job: %v", err)
-	}
-
-	fmt.Println("Scheduler started.")
-	if err := scheduler.Run(); err != nil {
-		log.Fatalf("failed to run scheduler: %v", err)
-	}
+.admin-menu-item {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-func runElasticsearchIndexer(distributor worker.TaskDistributor) {
-	ticker := time.NewTicker(1 * time.Minute)
-	defer ticker.Stop()
+.admin-menu-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
 
-	for range ticker.C {
-		err := distributor.DistributeTaskIndexTickets(context.Background(), &worker.PayloadIndexTickets{}, asynq.Queue(worker.QueueDefault))
-		if err != nil {
-			log.Printf("failed to distribute task to index tickets: %v", err)
-		}
-	}
+.admin-menu-item h3 {
+  margin-top: 0;
+  color: #007bff;
+}
+
+.admin-menu-item p {
+  margin-bottom: 0;
+  color: #6c757d;
 }
