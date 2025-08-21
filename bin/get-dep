@@ -1,0 +1,39 @@
+#!/bin/bash -e
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+mkdir -p deps && cd deps
+
+MAIN_REPOS=(
+    "bilitioo-backend|https://github.com/Matltin/Bilitioo-Backend.git|main"
+)
+
+process_repo() {
+    local config="$1"
+    IFS='|' read -r name url branch commit <<< "$config"
+    branch=${branch:-main}
+
+    echo -e "${YELLOW}Processing: $name (branch: $branch)${NC}"
+
+    if [[ -d "$name" ]]; then
+        cd "$name"
+        git fetch origin
+        git checkout "$branch"
+        git reset --hard "origin/$branch"
+        [[ -n "$commit" ]] && git checkout "$commit"
+        cd ..
+    else
+        git clone --branch "$branch" "$url" "$name"
+        [[ -n "$commit" ]] && cd "$name" && git checkout "$commit" && cd ..
+    fi
+    echo -e "${GREEN}✓ $name${NC}"
+}
+
+echo -e "${YELLOW}Starting dependency management...${NC}"
+
+for repo in "${MAIN_REPOS[@]}"; do
+    process_repo "$repo"
+done
+
+echo -e "${GREEN}All dependencies processed!${NC}"
