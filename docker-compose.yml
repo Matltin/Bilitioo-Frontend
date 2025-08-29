@@ -1,19 +1,11 @@
-# Docker Compose file version
 version: '3.8'
 
-# Define the services (containers) for the application
 services:
-  # The frontend service
   frontend:
-    # Build the Docker image using the Dockerfile in the current directory
     build:
       context: .
       dockerfile: Dockerfile
-    # Set a custom name for the container for easy identification
     container_name: bilitioo_frontend
-    # --- FIX: Changed the host port from 3000 to 3001 ---
-    # Map port 3001 on the host machine to port 80 in the container
     ports:
       - "3001:80"
-    # Restart the container automatically unless it was manually stopped
     restart: unless-stopped
