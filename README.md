@@ -244,6 +244,53 @@ For detailed backend API documentation, refer to the backend repository's docume
 - Payment processing
 - Penalty calculations
 
+## 🖼️ Application Screenshots
+
+<details>
+<summary><b>🔐 Authentication</b></summary>
+<br>
+
+**Login & Register**
+![Login Page](./docs/images/login.png)
+![Register Page](./docs/images/register.png)
+![Forgot Password](./docs/images/forgot-password.png)
+
+</details>
+
+<details>
+<summary><b>📷 User Panel</b></summary>
+<br>
+
+**Home & Search**
+![User Home](./docs/images/user-home.png)
+![User Search](./docs/images/user-search.png)
+
+**Bookings & Payments**
+![User Bookings](./docs/images/user-bookings.png)
+![User Payment](./docs/images/user-payment.png)
+
+**Profile & Settings**
+![User Profile](./docs/images/user-profile.png)
+
+</details>
+
+<details>
+<summary><b>🔑 Admin Panel</b></summary>
+<br>
+
+**Dashboard**
+![Admin Dashboard](./docs/images/admin-dashboard.png)
+
+**User & Travel Management**
+![Manage Users](./docs/images/admin-users.png)
+![Manage Travels](./docs/images/admin-travels.png)
+
+**Settings**
+![Admin Settings](./docs/images/admin-settings.png)
+
+</details>
+
+
 ## 🤝 Contributing
 
 1. Fork the repository
