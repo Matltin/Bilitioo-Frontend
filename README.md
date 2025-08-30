@@ -284,9 +284,8 @@ For detailed backend API documentation, refer to the backend repository's docume
 **User & Travel Management**
 ![Manage Users](./docs/images/admin-users.png)
 ![Manage Travels](./docs/images/admin-travels.png)
-
-**Settings**
-![Admin Settings](./docs/images/admin-settings.png)
+![Admin Report](./docs/images/admin-report.png)
+![Admin Reservation](./docs/images.admin-change-reservation.png)
 
 </details>
 
