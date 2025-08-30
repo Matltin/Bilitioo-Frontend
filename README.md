@@ -253,7 +253,7 @@ For detailed backend API documentation, refer to the backend repository's docume
 **Login & Register**
 ![Login Page](./docs/images/login.png)
 ![Register Page](./docs/images/register.png)
-![Forgot Password](./docs/images/forgot-password.png)
+![Forgot Password](./docs/images/welcome.png)
 
 </details>
 
