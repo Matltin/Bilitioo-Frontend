@@ -265,9 +265,9 @@ For detailed backend API documentation, refer to the backend repository's docume
 ![User Home](./docs/images/user-home.png)
 ![User Search](./docs/images/user-search.png)
 
-**Bookings & Payments**
-![User Bookings](./docs/images/user-bookings.png)
-![User Payment](./docs/images/user-payment.png)
+**Bookings & Report**
+![User Bookings](./docs/images/user-booking.png)
+![User Report](./docs/images/user-report.png)
 
 **Profile & Settings**
 ![User Profile](./docs/images/user-profile.png)
