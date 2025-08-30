@@ -568,21 +568,6 @@ docker compose exec -T postgres psql -U root bilitioo < backup.sql
 
 MIT License © 2025 [Matin](https://github.com/Matltin), [Reyhon](https://github.com/ryhn-mir) 🍀
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test with `make all`
-5. Submit a pull request
-
-## 📞 Support
-
-For issues and questions:
-- Create an issue in the repository
-- Check the troubleshooting section
-- Review container logs for debugging
-
 ## 🖼️ Application Screenshots
 
 <details>
